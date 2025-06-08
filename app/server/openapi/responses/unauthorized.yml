@@ -1,0 +1,8 @@
+UnauthorizedResponse:
+  description: The request is unauthorized
+  content:
+    application/json:
+      schema:
+        $ref: '../schemas/error.yml#/ErrorMessage'
+        #$ref: '../schema.yml#/components/schemas/ErrorMessage'
+

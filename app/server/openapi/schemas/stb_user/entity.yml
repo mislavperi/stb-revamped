@@ -1,0 +1,44 @@
+StbUser:
+  type: object
+  required:
+    - stbUserId
+    - stbUserUuid
+    - stbCustomerId
+    - hasStatus
+    - hasAuthMethod
+    - firstName
+    - middleName
+    - lastName
+    - initials
+    - dtCreated
+    - dtModified
+  properties:
+    stbUserId:
+      type: integer
+      format: int32
+    stbUserUuid:
+      type: string
+      format: uuid
+    stbCustomerId:
+      type: integer
+      format: int32
+    hasStatus:
+      type: integer
+      format: int32
+    hasAuthMethod:
+      type: integer
+      format: int32
+    firstName:
+      type: string
+    middleName:
+      type: string
+    lastName:
+      type: string
+    initials:
+      type: string
+    dtCreated:
+      type: string
+      format: date-time
+    dtModified:
+      type: string
+      format: date-time

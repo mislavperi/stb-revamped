@@ -1,0 +1,65 @@
+TimeEntryUuidPaths:
+  x-ogen-operation-group: TimeEntry
+  delete:
+    tags:
+      - time_entry
+    description: Remove a time entry from a matter
+    operationId: removeTimeEntry
+    parameters:
+      - name: timeEntryUuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    security:
+      - BearerAuth: []
+    responses:
+      '204':
+        description: Time entry removed from matter
+      '401':
+        $ref: '../responses/unauthorized.yml#/UnauthorizedResponse'
+      '500':
+        $ref: '../responses/server_error.yml#/ServerErrorResponse'
+      'default':
+        description: Unexpected error
+        content:
+          application/json:
+            schema:
+              $ref: '../responses/server_error.yml#/ServerErrorResponse'
+
+  patch:
+    tags:
+      - time_entry
+    description: Update a time entry
+    operationId: updateTimeEntry
+    parameters:
+      - name: timeEntryUuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    security:
+      - BearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/time_entry/update.yml#/UpdateTimeEntryRequestBody'
+    responses:
+      '204':
+        description: Time entry updated
+      '400':
+        $ref: '../responses/bad_input.yml#/BadInputResponse'
+      '401':
+        $ref: '../responses/unauthorized.yml#/UnauthorizedResponse'
+      '500':
+        $ref: '../responses/server_error.yml#/ServerErrorResponse'
+      'default':
+        description: Unexpected error
+        content:
+          application/json:
+            schema:
+              $ref: '../responses/server_error.yml#/ServerErrorResponse'

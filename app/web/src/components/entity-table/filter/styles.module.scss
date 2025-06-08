@@ -1,0 +1,20 @@
+.accordionControl {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 5px;
+  &:hover {
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: white !important;
+    transition: all 0.3s;
+  }
+}
+
+.control {
+  width: 100px;
+}

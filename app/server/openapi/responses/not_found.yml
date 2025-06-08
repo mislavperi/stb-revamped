@@ -1,0 +1,9 @@
+NotFoundResponse:
+  description: The specified resource was not found
+  content:
+    application/json:
+      schema:
+        $ref: '../schemas/error.yml#/ErrorMessage'
+        #$ref: '../schema.yml#/components/schemas/ErrorMessage'
+
+

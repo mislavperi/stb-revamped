@@ -1,0 +1,112 @@
+StbUserUuidPaths:
+  x-ogen-operation-group: StbUser
+  get:
+    tags:
+      - stb_user
+    description: Get a single stb_user by UUID
+    operationId: getStbUserByUUID
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: stb_user_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The UUID of the stb_user
+    responses:
+      '200':
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/stb_user/entity.yml#/StbUser'
+      '400':
+        $ref: '../responses/bad_input.yml#/BadInputResponse'
+      '401':
+        $ref: '../responses/unauthorized.yml#/UnauthorizedResponse'
+      '404':
+        $ref: '../responses/not_found.yml#/NotFoundResponse'
+      '500':
+        $ref: '../responses/server_error.yml#/ServerErrorResponse'
+      'default':
+        description: Unexpected error
+        content:
+          application/json:
+            schema:
+              $ref: '../responses/server_error.yml#/ServerErrorResponse'
+
+  put:
+    tags:
+      - stb_user
+    description: Update an existing stb_user by UUID
+    operationId: updateStbUserByUUID
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: stb_user_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The UUID of the stb_user
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/stb_user/update.yml#/StbUserUpdateRequestBody'
+    responses:
+      '200':
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/stb_user/entity.yml#/StbUser'
+      '400':
+        $ref: '../responses/bad_input.yml#/BadInputResponse'
+      '401':
+        $ref: '../responses/unauthorized.yml#/UnauthorizedResponse'
+      '404':
+        $ref: '../responses/not_found.yml#/NotFoundResponse'
+      '500':
+        $ref: '../responses/server_error.yml#/ServerErrorResponse'
+      'default':
+        description: Unexpected error
+        content:
+          application/json:
+            schema:
+              $ref: '../responses/server_error.yml#/ServerErrorResponse'
+
+  delete:
+    tags:
+      - stb_user
+    description: Delete a single stb_user by UUID
+    operationId: deleteStbUserByUUID
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: stb_user_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The UUID of the stb_user to be deleted
+    responses:
+      '204':
+        description: Successfully deleted the stb_user
+      '400':
+        $ref: '../responses/bad_input.yml#/BadInputResponse'
+      '401':
+        $ref: '../responses/unauthorized.yml#/UnauthorizedResponse'
+      '404':
+        $ref: '../responses/not_found.yml#/NotFoundResponse'
+      '500':
+        $ref: '../responses/server_error.yml#/ServerErrorResponse'
+      'default':
+        description: Unexpected error
+        content:
+          application/json:
+            schema:
+              $ref: '../responses/server_error.yml#/ServerErrorResponse'

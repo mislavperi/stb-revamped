@@ -1,0 +1,59 @@
+StbUserPaths:
+  x-ogen-operation-group: StbUser
+  post:
+    tags:
+      - stb_user
+    description: Create a new stb_user
+    operationId: createStbUser
+    security:
+      - BearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/stb_user/create.yml#/StbUserCreateRequestBody'
+    responses:
+      '201':
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/stb_user/entity.yml#/StbUser'
+      '400':
+        $ref: '../responses/bad_input.yml#/BadInputResponse'
+      '401':
+        $ref: '../responses/unauthorized.yml#/UnauthorizedResponse'
+      '500':
+        $ref: '../responses/server_error.yml#/ServerErrorResponse'
+      'default':
+        description: Unexpected error
+        content:
+          application/json:
+            schema:
+              $ref: '../responses/server_error.yml#/ServerErrorResponse'
+  
+  get:
+    tags:
+      - stb_user
+    description: List all stb_users
+    operationId: getStbUsers
+    security:
+      - BearerAuth: []
+    responses:
+      '200':
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '../schemas/stb_user/entity.yml#/StbUser'
+      '401':
+        $ref: '../responses/unauthorized.yml#/UnauthorizedResponse'
+      '500':
+        $ref: '../responses/server_error.yml#/ServerErrorResponse'
+      'default':
+        description: Unexpected error
+        content:
+          application/json:
+            schema:
+              $ref: '../responses/server_error.yml#/ServerErrorResponse'

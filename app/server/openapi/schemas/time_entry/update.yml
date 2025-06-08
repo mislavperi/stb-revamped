@@ -1,0 +1,6 @@
+UpdateTimeEntryRequestBody:
+  description: The payload for updating a time entry
+  type: object
+  properties:
+    testField:
+      type: string  

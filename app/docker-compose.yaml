@@ -1,0 +1,221 @@
+networks:
+  steaby-net: {}
+
+volumes:
+  grafana-storage: {}
+
+services:
+
+
+  # # # # # # # # # # # #
+  #
+  #  Application Containers
+  #
+  # # # # # # # # # # # #
+
+  app:
+    networks: [steaby-net]
+    container_name: steaby-app
+    depends_on:
+      db-migrate:
+        condition: service_completed_successfully
+      jaeger-init:
+        condition: service_completed_successfully
+      prometheus-init:
+        condition: service_completed_successfully
+      test:
+        condition: service_completed_successfully
+    build:
+      context: .
+      dockerfile: app.Dockerfile
+    image: "steaby:latest"
+    volumes:
+      - ./go:/app:rw
+    environment: &local-dev
+      #MONGODB_INITDB_ROOT_USERNAME_FILE
+      #MONGODB_INITDB_ROOT_PASSWORD_FILE
+      MONGODB_HOST: &mongo-host steaby-mongodb
+      MONGODB_INITDB_ROOT_USERNAME: &mongo-user ${MONGODB_USER:-steaby_rw}
+      MONGODB_INITDB_ROOT_PASSWORD: &mongo-password ${MONGODB_PASSWORD:-GoMONGO}
+      PG_HOST: &pg-host steaby-pg
+      POSTGRES_USER: &pg-user ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: &pg-password ${POSTGRES_PASSWORD:-none1none}
+    working_dir: /go_app
+    #command: [ "gunicorn", "-c", "gunicorn_config.py", "bot.main:bot", "--bind", "0.0.0.0:8000" ]
+    command: [ "sleep", "infinity"]
+    ports:
+      - "8001:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-s", "localhost:8000/healthz"]
+      interval: 10s
+      timeout: 9s
+      retries: 6
+
+
+
+  # # # # # # # # # # # #
+  #
+  #  Database Containers
+  #
+  # # # # # # # # # # # #
+
+  pg:
+    networks: [steaby-net]
+    container_name: *pg-host
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: steaby
+      POSTGRES_PASSWORD: *pg-password
+      POSTGRES_USER: *pg-user
+
+  mongo:
+    networks: [steaby-net]
+    container_name: *mongo-host
+    #image: mongodb/mongodb-atlas-local:latest
+    image: mongodb/mongodb-community-server:7.0.16-ubuntu2204
+    ports:
+      - "27017:27017"
+    environment:
+      MONGODB_DB: steaby
+      MONGODB_PASSWORD: *mongo-password
+      MONGODB_USER: *mongo-user
+
+  pg-init:
+    networks: [steaby-net]
+    container_name: steaby-pg-init
+    image: "steaby:latest"
+    volumes:
+      - ./:/db
+    environment:
+      <<: *local-dev
+      WAIT_FOR_HOST: *pg-host
+      WAIT_FOR_PORT: 5432
+    working_dir: /db
+    command: [ "scripts/wait-for-port-up.sh" ]
+
+  mongo-init:
+    networks: [steaby-net]
+    container_name: steaby-mongo-init
+    image: "steaby:latest"
+    volumes:
+      - ./:/db
+    environment:
+      <<: *local-dev
+      WAIT_FOR_HOST: *mongo-host
+      WAIT_FOR_PORT: 27017
+    working_dir: /db
+    command: [ "scripts/wait-for-port-up.sh" ]
+
+  db-migrate:
+    networks: [steaby-net]
+    container_name: steaby-db-migrate
+    depends_on:
+      pg-init:
+        condition: service_completed_successfully
+      mongo-init:
+        condition: service_completed_successfully
+    image: "steaby-db-migrate:latest"
+    build:
+      context: .
+      dockerfile: db-migrate.Dockerfile
+    volumes:
+      - ./:/db
+    environment:
+      <<: *local-dev
+      PGPASSWORD: ${POSTGRES_PASSWORD:-GoPG}
+      MONGODB_PASSWORD: ${MONGO_PASSWORD:-GoMONGO}
+    working_dir: /db
+    command: [ "scripts/db-migrate.sh" ]
+    #command: [ "sleep", "infinity" ]
+
+
+
+  # # # # # # # # # # # #
+  #
+  #  Performance Monitoring Containers
+  #
+  # # # # # # # # # # # #
+
+  grafana:
+    networks: [steaby-net]
+    container_name: steaby-grafana
+    depends_on:
+      prometheus-init:
+        condition: service_completed_successfully
+    image: grafana/grafana:latest
+    volumes:
+      - ./observability/grafana/provisioning:/etc/grafana/provisioning
+      - "grafana-storage:/var/lib/grafana"
+    environment:
+      - GF_LOG_LEVEL=warn
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    ports:
+      - "3000:3000"
+
+  # See: https://www.jaegertracing.io/docs/1.58/spm/#architecture
+  jaeger:
+    networks: [steaby-net]
+    container_name: &jaeger-host steaby-jaeger
+    image: jaegertracing/jaeger:2.2.0
+    ports:
+      - "16686:16686" # UI
+      - "4317:4317"   # OTLP over gRPC
+
+  jaeger-init:
+    networks: [steaby-net]
+    container_name: steaby-jaeger-init
+    image: "steaby:latest"
+    volumes:
+      - ./:/stats
+    environment:
+      WAIT_FOR_HOST: *jaeger-host
+      WAIT_FOR_PORT: 4317
+    working_dir: /stats
+    command: [ "scripts/wait-for-port-up.sh" ]
+
+  # See: https://www.jaegertracing.io/docs/1.58/spm/#architecture
+  prometheus:
+    networks: [steaby-net]
+    container_name: &prometheus-host steaby-prometheus
+    image: prom/prometheus:v2.52.0
+    volumes:
+      - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - '9090:9090'
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      #- --log.level=debug
+      - --log.level=warn
+
+  prometheus-init:
+    networks: [steaby-net]
+    container_name: steaby-prometheus-init
+    image: "steaby:latest"
+    volumes:
+      - ./:/stats
+    environment:
+      WAIT_FOR_HOST: *prometheus-host
+      WAIT_FOR_PORT: 9090
+    working_dir: /stats
+    command: [ "scripts/wait-for-port-up.sh" ]
+
+  test:
+    networks: [steaby-net]
+    container_name: steaby-test
+    build:
+      context: .
+      dockerfile: app.Dockerfile
+    image: "steaby:latest"
+    volumes:
+      - ./go:/app
+    environment:
+      <<: *local-dev
+      SKIP_INTEGRATION_TESTS: ${SKIP_INTEGRATION_TESTS:-true}
+      SKIP_UNIT_TESTS: ${SKIP_UNIT_TESTS:-true}
+    working_dir: /app
+    #command: [ "sleep", "infinity"]
+    command: ["test/run.sh"]

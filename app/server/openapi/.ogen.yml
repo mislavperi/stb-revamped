@@ -1,0 +1,3 @@
+parser:
+  allow_remote: true
+expand: './openapi/spec.yml'

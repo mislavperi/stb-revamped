@@ -1,0 +1,67 @@
+version: '2'
+sql:
+  # Must define the standard config for the database, but cannot be a fake template.
+  # Parser fails if you define this at the root level.
+  - &standard_config_opts
+    queries: './internal/db/sql/struct_type/struct_type_read.sql'
+    schema: '../database/sql/steaby_ddl.sql'
+    engine: postgresql
+    gen:
+      go:
+        &standard_go_config
+        package: 'strctro'
+        out: './internal/struct_type/sql_ro' 
+        omit_unused_structs: true
+        sql_package: 'pgx/v5'
+        emit_json_tags: true
+        output_files_suffix: '_generated.sql'
+        json_tags_case_style: 'camel'
+    rules:
+      - no-delete
+  - <<: *standard_config_opts
+    queries: './internal/db/sql/time_entry/time_entry_read.sql'
+    gen:
+      go:
+        <<: *standard_go_config
+        package: 'timeentryro'
+        out: './internal/time_entry/sql_ro'
+  - <<: *standard_config_opts
+    queries: './internal/db/sql/time_entry/time_entry_write.sql'
+    gen:
+      go:
+        <<: *standard_go_config
+        package: 'timeentryrw'
+        out: './internal/time_entry/sql_rw'
+  - <<: *standard_config_opts
+    queries: './internal/db/sql/stb_user/stb_user_read.sql'
+    gen:
+      go:
+        <<: *standard_go_config
+        package: 'stbuserro'
+        out: './internal/stb_user/sql_ro'
+  - <<: *standard_config_opts
+    queries: './internal/db/sql/stb_user/stb_user_write.sql'
+    gen:
+      go:
+        <<: *standard_go_config
+        package: 'stbuserrw'
+        out: './internal/stb_user/sql_rw'
+overrides:
+  go:
+    overrides:
+      - db_type: uuid
+        go_type:
+          import: github.com/google/uuid
+          type: UUID
+      - db_type: "timestamptz"
+        go_type:
+          type: "time.Time"
+      - db_type: "timestamptz"
+        nullable: true
+        go_type:
+          type: "*time.Time"
+rules:
+  - name: no-delete
+    message: "don't use delete statements"
+    rule: |
+      query.sql.contains("DELETE")

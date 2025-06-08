@@ -1,0 +1,19 @@
+openapi: 3.0.2
+info:
+  version: 0.0.1
+  title: STEABY Application API
+paths:
+  /time-entry:
+    $ref: './paths/time_entry.yml#/TimeEntryPaths'
+  /time-entry/{timeEntryUuid}:
+    $ref: './paths/time_entry_uuid.yml#/TimeEntryUuidPaths'
+  /stb_user:
+    $ref: './paths/stb_user.yml#/StbUserPaths'
+  /stb_user/{stb_user_uuid}:
+    $ref: './paths/stb_user_uuid.yml#/StbUserUuidPaths'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

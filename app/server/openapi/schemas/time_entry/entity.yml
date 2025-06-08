@@ -1,0 +1,66 @@
+TimeEntry:
+  description: A time entry
+  required:
+    - timeEntryUuid
+    - dtLogged
+    - workedByName
+    - clientName
+    - matterName
+    - hoursLogged
+    - dtStart
+    - dtStop
+    - rate
+    - amount
+    - isBillable
+  type: object
+  properties:
+    timeEntryUuid:
+      type: string
+      format: uuid
+    dtLogged:
+      type: string
+      format: date-time
+    workedByName:
+      type: string
+    clientName:
+      type: string
+    matterName:
+      type: string
+    hoursLogged:
+      type: number
+      format: float32
+    dtStart:
+      type: string
+      format: date-time
+    dtStop:
+      type: string
+      format: date-time
+    rate:
+      type: number
+      format: float
+    amount:
+      type: number
+      format: float
+    isBillable:
+      type: boolean
+    description:
+      type: string
+    notes:
+      type: string
+
+
+# export type TimeEntry = {
+#   id: string
+#   date: string
+#   workedByName: string
+#   client: string
+#   matter: string
+#   hours: number
+#   startTime: string
+#   stopTime: string
+#   rate: number
+#   amount: number
+#   billable: boolean
+#   description: string
+#   notes: string
+# }

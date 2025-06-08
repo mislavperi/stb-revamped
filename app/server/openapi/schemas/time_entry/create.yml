@@ -1,0 +1,28 @@
+CreateTimeEntryRequestBody:
+  description: The payload for creating a time entry
+  required:
+    - matterId
+    - trackingEntityId
+    - isGratias
+    - timeSpent
+    - hasStatus
+  type: object
+  properties:
+    matterId:
+      type: integer
+      format: int16
+    trackingEntityId:
+      type: integer
+      format: int32
+    isGratias:
+      type: boolean
+    timeSpent:
+      type: number
+      format: float32
+    hasStatus:
+      type: integer
+      format: int16
+    invoiceComment:
+      type: string
+    internalNote:
+      type: string

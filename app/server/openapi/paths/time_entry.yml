@@ -1,0 +1,59 @@
+TimeEntryPaths:
+  x-ogen-operation-group: TimeEntry
+  post:
+    tags:
+      - time_entry
+    description: Add a time entry to a matter
+    operationId: createTimeEntry
+    security:
+      - BearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/time_entry/create.yml#/CreateTimeEntryRequestBody'
+    responses:
+      '201':
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/time_entry/entity.yml#/TimeEntry'
+      '400':
+        $ref: '../responses/bad_input.yml#/BadInputResponse'
+      '401':
+        $ref: '../responses/unauthorized.yml#/UnauthorizedResponse'
+      '500':
+        $ref: '../responses/server_error.yml#/ServerErrorResponse'
+      'default':
+        description: Unexpected error
+        content:
+          application/json:
+            schema:
+              $ref: '../responses/server_error.yml#/ServerErrorResponse'
+
+  get:
+    tags:
+      - time_entry
+    description: Get all time entries
+    operationId: getTimeEntries
+    security:
+      - BearerAuth: []
+    responses:
+      '200':
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '../schemas/time_entry/entity.yml#/TimeEntry'
+      '401':
+        $ref: '../responses/unauthorized.yml#/UnauthorizedResponse'
+      '500':
+        $ref: '../responses/server_error.yml#/ServerErrorResponse'
+      'default':
+        description: Unexpected error
+        content:
+          application/json:
+            schema:
+              $ref: '../responses/server_error.yml#/ServerErrorResponse'

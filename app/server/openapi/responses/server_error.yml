@@ -1,0 +1,8 @@
+ServerErrorResponse:
+  description: Unexpected server error
+  content:
+    application/json:
+      schema:
+        $ref: '../schemas/error.yml#/ErrorMessage'
+
+
