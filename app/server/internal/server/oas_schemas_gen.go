@@ -16,6 +16,7 @@ func (s *ServerErrorResponseStatusCode) Error() string {
 
 type BearerAuth struct {
 	Token string
+	Roles []string
 }
 
 // GetToken returns the value of Token.
@@ -23,9 +24,19 @@ func (s *BearerAuth) GetToken() string {
 	return s.Token
 }
 
+// GetRoles returns the value of Roles.
+func (s *BearerAuth) GetRoles() []string {
+	return s.Roles
+}
+
 // SetToken sets the value of Token.
 func (s *BearerAuth) SetToken(val string) {
 	s.Token = val
+}
+
+// SetRoles sets the value of Roles.
+func (s *BearerAuth) SetRoles(val []string) {
+	s.Roles = val
 }
 
 type CreateStbUserBadRequest ErrorMessage
@@ -302,6 +313,52 @@ func (o OptString) Or(d string) string {
 	return d
 }
 
+// NewOptUUID returns new OptUUID with value set to v.
+func NewOptUUID(v uuid.UUID) OptUUID {
+	return OptUUID{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUUID is optional uuid.UUID.
+type OptUUID struct {
+	Value uuid.UUID
+	Set   bool
+}
+
+// IsSet returns true if OptUUID was set.
+func (o OptUUID) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUUID) Reset() {
+	var v uuid.UUID
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUUID) SetTo(v uuid.UUID) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUUID) Get() (v uuid.UUID, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUUID) Or(d uuid.UUID) uuid.UUID {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 type RemoveTimeEntryInternalServerError ErrorMessage
 
 func (*RemoveTimeEntryInternalServerError) removeTimeEntryRes() {}
@@ -468,7 +525,6 @@ func (s *StbUser) SetDtModified(val time.Time) {
 	s.DtModified = val
 }
 
-func (*StbUser) createStbUserRes()       {}
 func (*StbUser) getStbUserByUUIDRes()    {}
 func (*StbUser) updateStbUserByUUIDRes() {}
 
@@ -563,6 +619,100 @@ func (s *StbUserCreateRequestBody) SetLastName(val string) {
 func (s *StbUserCreateRequestBody) SetInitials(val string) {
 	s.Initials = val
 }
+
+// Ref: #/StbUserResponse
+type StbUserResponse struct {
+	StbUserUuid   OptUUID   `json:"stbUserUuid"`
+	StbCustomerId OptInt32  `json:"stbCustomerId"`
+	HasStatus     OptInt32  `json:"hasStatus"`
+	HasAuthMethod OptInt32  `json:"hasAuthMethod"`
+	FirstName     OptString `json:"firstName"`
+	MiddleName    OptString `json:"middleName"`
+	LastName      OptString `json:"lastName"`
+	Initials      OptString `json:"initials"`
+}
+
+// GetStbUserUuid returns the value of StbUserUuid.
+func (s *StbUserResponse) GetStbUserUuid() OptUUID {
+	return s.StbUserUuid
+}
+
+// GetStbCustomerId returns the value of StbCustomerId.
+func (s *StbUserResponse) GetStbCustomerId() OptInt32 {
+	return s.StbCustomerId
+}
+
+// GetHasStatus returns the value of HasStatus.
+func (s *StbUserResponse) GetHasStatus() OptInt32 {
+	return s.HasStatus
+}
+
+// GetHasAuthMethod returns the value of HasAuthMethod.
+func (s *StbUserResponse) GetHasAuthMethod() OptInt32 {
+	return s.HasAuthMethod
+}
+
+// GetFirstName returns the value of FirstName.
+func (s *StbUserResponse) GetFirstName() OptString {
+	return s.FirstName
+}
+
+// GetMiddleName returns the value of MiddleName.
+func (s *StbUserResponse) GetMiddleName() OptString {
+	return s.MiddleName
+}
+
+// GetLastName returns the value of LastName.
+func (s *StbUserResponse) GetLastName() OptString {
+	return s.LastName
+}
+
+// GetInitials returns the value of Initials.
+func (s *StbUserResponse) GetInitials() OptString {
+	return s.Initials
+}
+
+// SetStbUserUuid sets the value of StbUserUuid.
+func (s *StbUserResponse) SetStbUserUuid(val OptUUID) {
+	s.StbUserUuid = val
+}
+
+// SetStbCustomerId sets the value of StbCustomerId.
+func (s *StbUserResponse) SetStbCustomerId(val OptInt32) {
+	s.StbCustomerId = val
+}
+
+// SetHasStatus sets the value of HasStatus.
+func (s *StbUserResponse) SetHasStatus(val OptInt32) {
+	s.HasStatus = val
+}
+
+// SetHasAuthMethod sets the value of HasAuthMethod.
+func (s *StbUserResponse) SetHasAuthMethod(val OptInt32) {
+	s.HasAuthMethod = val
+}
+
+// SetFirstName sets the value of FirstName.
+func (s *StbUserResponse) SetFirstName(val OptString) {
+	s.FirstName = val
+}
+
+// SetMiddleName sets the value of MiddleName.
+func (s *StbUserResponse) SetMiddleName(val OptString) {
+	s.MiddleName = val
+}
+
+// SetLastName sets the value of LastName.
+func (s *StbUserResponse) SetLastName(val OptString) {
+	s.LastName = val
+}
+
+// SetInitials sets the value of Initials.
+func (s *StbUserResponse) SetInitials(val OptString) {
+	s.Initials = val
+}
+
+func (*StbUserResponse) createStbUserRes() {}
 
 // Ref: #/StbUserUpdateRequestBody
 type StbUserUpdateRequestBody struct {
@@ -843,4 +993,3 @@ func (s *UpdateTimeEntryRequestBody) SetTestField(val OptString) {
 type UpdateTimeEntryUnauthorized ErrorMessage
 
 func (*UpdateTimeEntryUnauthorized) updateTimeEntryRes() {}
-

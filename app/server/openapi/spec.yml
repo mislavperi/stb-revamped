@@ -3,7 +3,178 @@ info:
     title: STEABY Application API
     version: 0.0.1
 paths:
-    # Existing paths
+    /stb_user:
+        get:
+            tags:
+                - stb_user
+            description: List all stb_users
+            operationId: getStbUsers
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/StbUser'
+                "401":
+                    $ref: '#/components/responses/UnauthorizedResponse'
+                "500":
+                    $ref: '#/components/responses/ServerErrorResponse'
+                default:
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ServerErrorResponse'
+            security:
+                -   BearerAuth: []
+        post:
+            tags:
+                - stb_user
+            description: Create a new stb_user
+            operationId: createStbUser
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/StbUserCreateRequestBody'
+                required: true
+            responses:
+                "201":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/StbUserResponse'
+                "400":
+                    $ref: '#/components/responses/BadInputResponse'
+                "401":
+                    $ref: '#/components/responses/UnauthorizedResponse'
+                "500":
+                    $ref: '#/components/responses/ServerErrorResponse'
+                default:
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ServerErrorResponse'
+            security:
+                -   BearerAuth: []
+    /stb_user/{stb_user_uuid}:
+        get:
+            tags:
+                - stb_user
+            description: Get a single stb_user by UUID
+            operationId: getStbUserByUUID
+            parameters:
+                -   name: stb_user_uuid
+                    in: path
+                    description: The UUID of the stb_user
+                    required: true
+                    style: simple
+                    explode: false
+                    schema:
+                        type: string
+                        format: uuid
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/StbUser'
+                "400":
+                    $ref: '#/components/responses/BadInputResponse'
+                "401":
+                    $ref: '#/components/responses/UnauthorizedResponse'
+                "404":
+                    $ref: '#/components/responses/NotFoundResponse'
+                "500":
+                    $ref: '#/components/responses/ServerErrorResponse'
+                default:
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ServerErrorResponse'
+            security:
+                -   BearerAuth: []
+        put:
+            tags:
+                - stb_user
+            description: Update an existing stb_user by UUID
+            operationId: updateStbUserByUUID
+            parameters:
+                -   name: stb_user_uuid
+                    in: path
+                    description: The UUID of the stb_user
+                    required: true
+                    style: simple
+                    explode: false
+                    schema:
+                        type: string
+                        format: uuid
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/StbUserUpdateRequestBody'
+                required: true
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/StbUser'
+                "400":
+                    $ref: '#/components/responses/BadInputResponse'
+                "401":
+                    $ref: '#/components/responses/UnauthorizedResponse'
+                "404":
+                    $ref: '#/components/responses/NotFoundResponse'
+                "500":
+                    $ref: '#/components/responses/ServerErrorResponse'
+                default:
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ServerErrorResponse'
+            security:
+                -   BearerAuth: []
+        delete:
+            tags:
+                - stb_user
+            description: Delete a single stb_user by UUID
+            operationId: deleteStbUserByUUID
+            parameters:
+                -   name: stb_user_uuid
+                    in: path
+                    description: The UUID of the stb_user to be deleted
+                    required: true
+                    style: simple
+                    explode: false
+                    schema:
+                        type: string
+                        format: uuid
+            responses:
+                "204":
+                    description: Successfully deleted the stb_user
+                "400":
+                    $ref: '#/components/responses/BadInputResponse'
+                "401":
+                    $ref: '#/components/responses/UnauthorizedResponse'
+                "404":
+                    $ref: '#/components/responses/NotFoundResponse'
+                "500":
+                    $ref: '#/components/responses/ServerErrorResponse'
+                default:
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ServerErrorResponse'
+            security:
+                -   BearerAuth: []
     /time-entry:
         get:
             tags:
@@ -22,6 +193,12 @@ paths:
                     $ref: '#/components/responses/UnauthorizedResponse'
                 "500":
                     $ref: '#/components/responses/ServerErrorResponse'
+                default:
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ServerErrorResponse'
             security:
                 -   BearerAuth: []
         post:
@@ -47,6 +224,12 @@ paths:
                     $ref: '#/components/responses/UnauthorizedResponse'
                 "500":
                     $ref: '#/components/responses/ServerErrorResponse'
+                default:
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ServerErrorResponse'
             security:
                 -   BearerAuth: []
     /time-entry/{timeEntryUuid}:
@@ -71,6 +254,12 @@ paths:
                     $ref: '#/components/responses/UnauthorizedResponse'
                 "500":
                     $ref: '#/components/responses/ServerErrorResponse'
+                default:
+                    description: Unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ServerErrorResponse'
             security:
                 -   BearerAuth: []
         patch:
@@ -102,121 +291,16 @@ paths:
                     $ref: '#/components/responses/UnauthorizedResponse'
                 "500":
                     $ref: '#/components/responses/ServerErrorResponse'
-            security:
-                -   BearerAuth: []
-    
-    # Added paths for stb_user
-    /stb_user:
-        post:
-            tags:
-                - stb_user
-            description: Create a new stb_user
-            operationId: createStbUser
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/StbUserCreateRequestBody'
-                required: true
-            responses:
-                "201":
+                default:
+                    description: Unexpected error
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/StbUser'
-                "400":
-                    $ref: '#/components/responses/BadInputResponse'
-                "401":
-                    $ref: '#/components/responses/UnauthorizedResponse'
-                "500":
-                    $ref: '#/components/responses/ServerErrorResponse'
+                                $ref: '#/components/schemas/ServerErrorResponse'
             security:
                 -   BearerAuth: []
-        get:
-            tags:
-                - stb_user
-            description: Get all stb_users
-            operationId: getStbUsers
-            responses:
-                "200":
-                    content:
-                        application/json:
-                            schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/StbUser'
-                "401":
-                    $ref: '#/components/responses/UnauthorizedResponse'
-                "500":
-                    $ref: '#/components/responses/ServerErrorResponse'
-            security:
-                -   BearerAuth: []
-    
-    /stb_user/{stb_user_uuid}:
-        get:
-            tags:
-                - stb_user
-            description: Get stb_user by UUID
-            operationId: getStbUserByUUID
-            parameters:
-                -   name: stb_user_uuid
-                    in: path
-                    required: true
-                    style: simple
-                    explode: false
-                    schema:
-                        type: string
-                        format: uuid
-            responses:
-                "200":
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/StbUser'
-                "401":
-                    $ref: '#/components/responses/UnauthorizedResponse'
-                "500":
-                    $ref: '#/components/responses/ServerErrorResponse'
-            security:
-                -   BearerAuth: []
-        patch:
-            tags:
-                - stb_user
-            description: Update stb_user by UUID
-            operationId: updateStbUserByUUID
-            parameters:
-                -   name: stb_user_uuid
-                    in: path
-                    required: true
-                    style: simple
-                    explode: false
-                    schema:
-                        type: string
-                        format: uuid
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/StbUserUpdateRequestBody'
-                required: true
-            responses:
-                "200":
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/StbUser'
-                "400":
-                    $ref: '#/components/responses/BadInputResponse'
-                "401":
-                    $ref: '#/components/responses/UnauthorizedResponse'
-                "500":
-                    $ref: '#/components/responses/ServerErrorResponse'
-            security:
-                -   BearerAuth: []
-
 components:
     schemas:
-        # Existing schemas
         CreateTimeEntryRequestBody:
             description: The payload for creating a time entry
             type: object
@@ -245,89 +329,198 @@ components:
                 - isGratias
                 - timeSpent
                 - hasStatus
-
-        # New StbUser schemas
-        StbUser:
-            description: A StbUser object
+        ErrorMessage:
             type: object
             properties:
-                stb_user_uuid:
+                message:
+                    type: string
+            required:
+                - message
+        ServerErrorResponse:
+            description: Unexpected server error
+        StbUser:
+            type: object
+            properties:
+                stbUserId:
+                    type: integer
+                    format: int32
+                stbUserUuid:
                     type: string
                     format: uuid
-                stb_customer_id:
+                stbCustomerId:
                     type: integer
-                    format: int16
-                first_name:
+                    format: int32
+                hasStatus:
+                    type: integer
+                    format: int32
+                hasAuthMethod:
+                    type: integer
+                    format: int32
+                firstName:
                     type: string
-                middle_name:
+                middleName:
                     type: string
-                last_name:
+                lastName:
                     type: string
                 initials:
                     type: string
-                has_status:
-                    type: integer
-                    format: int16
-                has_auth_method:
-                    type: integer
-                    format: int16
+                dtCreated:
+                    type: string
+                    format: date-time
+                dtModified:
+                    type: string
+                    format: date-time
             required:
-                - stb_user_uuid
-                - stb_customer_id
-                - first_name
-                - last_name
+                - stbUserId
+                - stbUserUuid
+                - stbCustomerId
+                - hasStatus
+                - hasAuthMethod
+                - firstName
+                - middleName
+                - lastName
                 - initials
-
+                - dtCreated
+                - dtModified
         StbUserCreateRequestBody:
-            description: The payload for creating a StbUser
             type: object
             properties:
-                stb_customer_id:
-                    type: integer
-                    format: int16
-                has_status:
-                    type: integer
-                    format: int16
-                has_auth_method:
-                    type: integer
-                    format: int16
-                first_name:
+                stbUserUuid:
                     type: string
-                middle_name:
+                    format: uuid
+                stbCustomerId:
+                    type: integer
+                    format: int32
+                hasStatus:
+                    type: integer
+                    format: int32
+                hasAuthMethod:
+                    type: integer
+                    format: int32
+                firstName:
                     type: string
-                last_name:
+                middleName:
+                    type: string
+                lastName:
                     type: string
                 initials:
                     type: string
             required:
-                - stb_customer_id
-                - first_name
-                - last_name
+                - stbUserUuid
+                - stbCustomerId
+                - hasStatus
+                - hasAuthMethod
+                - firstName
+                - middleName
+                - lastName
                 - initials
-
-        StbUserUpdateRequestBody:
-            description: The payload for updating a StbUser
+        StbUserResponse:
             type: object
             properties:
-                first_name:
+                stbUserUuid:
                     type: string
-                middle_name:
+                    format: uuid
+                stbCustomerId:
+                    type: integer
+                    format: int32
+                hasStatus:
+                    type: integer
+                    format: int32
+                hasAuthMethod:
+                    type: integer
+                    format: int32
+                firstName:
                     type: string
-                last_name:
+                middleName:
+                    type: string
+                lastName:
                     type: string
                 initials:
                     type: string
-                has_status:
+        StbUserUpdateRequestBody:
+            type: object
+            properties:
+                stbCustomerId:
                     type: integer
-                    format: int16
-                has_auth_method:
+                    format: int32
+                hasStatus:
                     type: integer
-                    format: int16
-
+                    format: int32
+                hasAuthMethod:
+                    type: integer
+                    format: int32
+                firstName:
+                    type: string
+                middleName:
+                    type: string
+                lastName:
+                    type: string
+                initials:
+                    type: string
+        TimeEntry:
+            description: A time entry
+            type: object
+            properties:
+                timeEntryUuid:
+                    type: string
+                    format: uuid
+                dtLogged:
+                    type: string
+                    format: date-time
+                workedByName:
+                    type: string
+                clientName:
+                    type: string
+                matterName:
+                    type: string
+                hoursLogged:
+                    type: number
+                    format: float32
+                dtStart:
+                    type: string
+                    format: date-time
+                dtStop:
+                    type: string
+                    format: date-time
+                rate:
+                    type: number
+                    format: float
+                amount:
+                    type: number
+                    format: float
+                isBillable:
+                    type: boolean
+                description:
+                    type: string
+                notes:
+                    type: string
+            required:
+                - timeEntryUuid
+                - dtLogged
+                - workedByName
+                - clientName
+                - matterName
+                - hoursLogged
+                - dtStart
+                - dtStop
+                - rate
+                - amount
+                - isBillable
+        UpdateTimeEntryRequestBody:
+            description: The payload for updating a time entry
+            type: object
+            properties:
+                testField:
+                    type: string
     responses:
-        # Existing responses
         BadInputResponse:
             description: Bad input
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/ErrorMessage'
+        NotFoundResponse:
+            description: The specified resource was not found
             content:
                 application/json:
                     schema:
@@ -344,7 +537,6 @@ components:
                 application/json:
                     schema:
                         $ref: '#/components/schemas/ErrorMessage'
-
     securitySchemes:
         BearerAuth:
             type: http

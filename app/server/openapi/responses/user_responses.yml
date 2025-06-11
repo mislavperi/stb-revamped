@@ -1,0 +1,23 @@
+StbUserResponse:
+  type: object
+  properties:
+    stbUserUuid:
+      type: string
+      format: uuid
+    stbCustomerId:
+      type: integer
+      format: int32
+    hasStatus:
+      type: integer
+      format: int32
+    hasAuthMethod:
+      type: integer
+      format: int32
+    firstName:
+      type: string
+    middleName:
+      type: string
+    lastName:
+      type: string
+    initials:
+      type: string

@@ -22,7 +22,7 @@ func NewHandler(ro *stbuserro.Queries, rw *stbuserrw.Queries) *Handler {
 	}
 }
 
-func (h *Handler) CreateStbUser(ctx context.Context, req server.StbUserCreateRequestBody) (server.StbUser, error) {
+func (h *Handler) CreateStbUser(ctx context.Context, req server.StbUserCreateRequestBody) (server.StbUserResponse, error) {
 	newUUID := uuid.New()
 	_, err := h.rw.CreateStbUser(ctx, stbuserrw.CreateStbUserParams{
 		StbUserUuid:   newUUID,
@@ -35,9 +35,9 @@ func (h *Handler) CreateStbUser(ctx context.Context, req server.StbUserCreateReq
 		HasAuthMethod: int16(req.HasAuthMethod),
 	})
 
-	return server.StbUser{
+	return server.StbUserResponse{
 		StbUserUuid:   newUUID,
-		StbCustomerId: req.StbCustomerId,
+		StbCustomerId: server.NewOptInt32(req.StbCustomerId),
 		FirstName:     req.FirstName,
 		MiddleName:    req.MiddleName,
 		LastName:      req.LastName,
@@ -45,6 +45,7 @@ func (h *Handler) CreateStbUser(ctx context.Context, req server.StbUserCreateReq
 		HasStatus:     req.HasStatus,
 		HasAuthMethod: req.HasAuthMethod,
 	}, err
+
 }
 
 func (h *Handler) GetStbUsers(ctx context.Context) ([]server.StbUser, error) {

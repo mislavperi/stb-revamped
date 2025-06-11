@@ -18,7 +18,7 @@ StbUserPaths:
         content:
           application/json:
             schema:
-              $ref: '../schemas/stb_user/entity.yml#/StbUser'
+              $ref: '../responses/user_responses.yml#/StbUserResponse'
       '400':
         $ref: '../responses/bad_input.yml#/BadInputResponse'
       '401':

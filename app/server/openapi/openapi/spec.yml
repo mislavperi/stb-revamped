@@ -45,7 +45,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/StbUser'
+                                $ref: '#/components/responses/StbUserCreateResponse'
                 "400":
                     $ref: '#/components/responses/BadInputResponse'
                 "401":
@@ -414,6 +414,29 @@ components:
                 - middleName
                 - lastName
                 - initials
+        StbUserCreateResponse:
+            type: object
+            properties:
+                stbUserUuid:
+                    type: string
+                    format: uuid
+                stbCustomerId:
+                    type: integer
+                    format: int32
+                hasStatus:
+                    type: integer
+                    format: int32
+                hasAuthMethod:
+                    type: integer
+                    format: int32
+                firstName:
+                    type: string
+                middleName:
+                    type: string
+                lastName:
+                    type: string
+                initials:
+                    type: string
         StbUserUpdateRequestBody:
             type: object
             properties:

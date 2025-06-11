@@ -30,7 +30,7 @@ func decodeCreateStbUserResponse(resp *http.Response) (res CreateStbUserRes, _ e
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response StbUser
+			var response StbUserResponse
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err

@@ -1161,6 +1161,41 @@ func (s *OptString) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes uuid.UUID as json.
+func (o OptUUID) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	json.EncodeUUID(e, o.Value)
+}
+
+// Decode decodes uuid.UUID from json.
+func (o *OptUUID) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptUUID to nil")
+	}
+	o.Set = true
+	v, err := json.DecodeUUID(d)
+	if err != nil {
+		return err
+	}
+	o.Value = v
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptUUID) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptUUID) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes RemoveTimeEntryInternalServerError as json.
 func (s *RemoveTimeEntryInternalServerError) Encode(e *jx.Encoder) {
 	unwrapped := (*ErrorMessage)(s)
@@ -1757,6 +1792,188 @@ func (s *StbUserCreateRequestBody) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *StbUserCreateRequestBody) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *StbUserResponse) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *StbUserResponse) encodeFields(e *jx.Encoder) {
+	{
+		if s.StbUserUuid.Set {
+			e.FieldStart("stbUserUuid")
+			s.StbUserUuid.Encode(e)
+		}
+	}
+	{
+		if s.StbCustomerId.Set {
+			e.FieldStart("stbCustomerId")
+			s.StbCustomerId.Encode(e)
+		}
+	}
+	{
+		if s.HasStatus.Set {
+			e.FieldStart("hasStatus")
+			s.HasStatus.Encode(e)
+		}
+	}
+	{
+		if s.HasAuthMethod.Set {
+			e.FieldStart("hasAuthMethod")
+			s.HasAuthMethod.Encode(e)
+		}
+	}
+	{
+		if s.FirstName.Set {
+			e.FieldStart("firstName")
+			s.FirstName.Encode(e)
+		}
+	}
+	{
+		if s.MiddleName.Set {
+			e.FieldStart("middleName")
+			s.MiddleName.Encode(e)
+		}
+	}
+	{
+		if s.LastName.Set {
+			e.FieldStart("lastName")
+			s.LastName.Encode(e)
+		}
+	}
+	{
+		if s.Initials.Set {
+			e.FieldStart("initials")
+			s.Initials.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfStbUserResponse = [8]string{
+	0: "stbUserUuid",
+	1: "stbCustomerId",
+	2: "hasStatus",
+	3: "hasAuthMethod",
+	4: "firstName",
+	5: "middleName",
+	6: "lastName",
+	7: "initials",
+}
+
+// Decode decodes StbUserResponse from json.
+func (s *StbUserResponse) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode StbUserResponse to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "stbUserUuid":
+			if err := func() error {
+				s.StbUserUuid.Reset()
+				if err := s.StbUserUuid.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"stbUserUuid\"")
+			}
+		case "stbCustomerId":
+			if err := func() error {
+				s.StbCustomerId.Reset()
+				if err := s.StbCustomerId.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"stbCustomerId\"")
+			}
+		case "hasStatus":
+			if err := func() error {
+				s.HasStatus.Reset()
+				if err := s.HasStatus.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"hasStatus\"")
+			}
+		case "hasAuthMethod":
+			if err := func() error {
+				s.HasAuthMethod.Reset()
+				if err := s.HasAuthMethod.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"hasAuthMethod\"")
+			}
+		case "firstName":
+			if err := func() error {
+				s.FirstName.Reset()
+				if err := s.FirstName.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"firstName\"")
+			}
+		case "middleName":
+			if err := func() error {
+				s.MiddleName.Reset()
+				if err := s.MiddleName.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"middleName\"")
+			}
+		case "lastName":
+			if err := func() error {
+				s.LastName.Reset()
+				if err := s.LastName.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"lastName\"")
+			}
+		case "initials":
+			if err := func() error {
+				s.Initials.Reset()
+				if err := s.Initials.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"initials\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode StbUserResponse")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *StbUserResponse) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *StbUserResponse) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
