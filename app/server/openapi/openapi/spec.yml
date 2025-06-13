@@ -16,7 +16,7 @@ paths:
                             schema:
                                 type: array
                                 items:
-                                    $ref: '#/components/schemas/StbUser'
+                                    $ref: '#/components/schemas/StbUserResponse'
                 "401":
                     $ref: '#/components/responses/UnauthorizedResponse'
                 "500":
@@ -437,6 +437,30 @@ components:
                     type: string
                 initials:
                     type: string
+        StbUserResponse:
+            type: object
+            properties:
+                stbUserUuid:
+                    type: string
+                    format: uuid
+                stbCustomerId:
+                    type: integer
+                    format: int32
+                hasStatus:
+                    type: integer
+                    format: int32
+                hasAuthMethod:
+                    type: integer
+                    format: int32
+                firstName:
+                    type: string
+                middleName:
+                    type: string
+                lastName:
+                    type: string
+                initials:
+                    type: string
+
         StbUserUpdateRequestBody:
             type: object
             properties:

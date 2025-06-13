@@ -2,8 +2,8 @@ package strctype
 
 import (
 	"context"
-	sqldb "stb/app/internal/db/sql"
-	sqlro "stb/app/internal/struct_type/sql_ro"
+	sqldb "stb/app/server/internal/db/sql"
+	sqlro "stb/app/server/internal/struct_type/sql_ro"
 )
 
 type structTypeRepoRepo struct {

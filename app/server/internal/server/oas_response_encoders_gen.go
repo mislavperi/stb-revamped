@@ -198,7 +198,7 @@ func encodeDeleteStbUserByUUIDResponse(response DeleteStbUserByUUIDRes, w http.R
 
 func encodeGetStbUserByUUIDResponse(response GetStbUserByUUIDRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *StbUser:
+	case *StbUserResponse:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
@@ -401,7 +401,7 @@ func encodeRemoveTimeEntryResponse(response RemoveTimeEntryRes, w http.ResponseW
 
 func encodeUpdateStbUserByUUIDResponse(response UpdateStbUserByUUIDRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *StbUser:
+	case *StbUserResponse:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))

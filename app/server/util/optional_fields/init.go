@@ -1,7 +1,7 @@
 package optfield
 
 import (
-	"stb/app/internal/server"
+	"stb/app/server/internal/server"
 )
 
 // func NewOptInt16(value int16) server.OptInt16 {

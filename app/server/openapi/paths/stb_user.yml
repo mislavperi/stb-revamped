@@ -46,7 +46,7 @@ StbUserPaths:
             schema:
               type: array
               items:
-                $ref: '../schemas/stb_user/entity.yml#/StbUser'
+                $ref: '../responses/user_responses.yml#/StbUserResponse'
       '401':
         $ref: '../responses/unauthorized.yml#/UnauthorizedResponse'
       '500':

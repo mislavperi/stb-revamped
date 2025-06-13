@@ -606,7 +606,7 @@ func decodeGetStbUserByUUIDResponse(resp *http.Response) (res GetStbUserByUUIDRe
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response StbUser
+			var response StbUserResponse
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err
@@ -1274,7 +1274,7 @@ func decodeUpdateStbUserByUUIDResponse(resp *http.Response) (res UpdateStbUserBy
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response StbUser
+			var response StbUserResponse
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err

@@ -4,27 +4,22 @@ import (
 	"context"
 
 	"stb/app/server/internal/server"
-	stbuserro "stb/app/server/internal/stb_user/sql_ro"
+	"stb/app/server/internal/stb_user/mappers"
 	stbuserrw "stb/app/server/internal/stb_user/sql_rw"
 
 	"github.com/google/uuid"
 )
 
-type Handler struct {
-	ro *stbuserro.Queries
-	rw *stbuserrw.Queries
+type StbUserHandler struct {
 }
 
-func NewHandler(ro *stbuserro.Queries, rw *stbuserrw.Queries) *Handler {
-	return &Handler{
-		ro: ro,
-		rw: rw,
-	}
+func NewStbUserHandler() *StbUserHandler {
+	return &StbUserHandler{}
 }
 
-func (h *Handler) CreateStbUser(ctx context.Context, req server.StbUserCreateRequestBody) (server.StbUserResponse, error) {
+func (h *StbUserHandler) CreateStbUser(ctx context.Context, req *server.StbUserCreateRequestBody) (server.CreateStbUserRes, error) {
 	newUUID := uuid.New()
-	_, err := h.rw.CreateStbUser(ctx, stbuserrw.CreateStbUserParams{
+	err := StbUserRepo.CreateStbUser(ctx, stbuserrw.CreateStbUserParams{
 		StbUserUuid:   newUUID,
 		StbCustomerID: int16(req.StbCustomerId),
 		FirstName:     req.FirstName,
@@ -35,75 +30,75 @@ func (h *Handler) CreateStbUser(ctx context.Context, req server.StbUserCreateReq
 		HasAuthMethod: int16(req.HasAuthMethod),
 	})
 
-	return server.StbUserResponse{
-		StbUserUuid:   newUUID,
+	return &server.StbUserResponse{
+		StbUserUuid:   server.NewOptUUID(newUUID),
 		StbCustomerId: server.NewOptInt32(req.StbCustomerId),
-		FirstName:     req.FirstName,
-		MiddleName:    req.MiddleName,
-		LastName:      req.LastName,
-		Initials:      req.Initials,
-		HasStatus:     req.HasStatus,
-		HasAuthMethod: req.HasAuthMethod,
+		FirstName:     server.NewOptString(req.FirstName),
+		MiddleName:    server.NewOptString(req.MiddleName),
+		LastName:      server.NewOptString(req.LastName),
+		Initials:      server.NewOptString(req.Initials),
+		HasStatus:     server.NewOptInt32(req.HasStatus),
+		HasAuthMethod: server.NewOptInt32(req.HasAuthMethod),
 	}, err
 
 }
 
-func (h *Handler) GetStbUsers(ctx context.Context) ([]server.StbUser, error) {
-	users, err := h.ro.ListStbUsers(ctx)
+func (h *StbUserHandler) GetStbUsers(ctx context.Context) (server.GetStbUsersRes, error) {
+	users, err := StbUserRepo.ListStbUsers(ctx)
 
-	var result []server.StbUser
+	var result []server.StbUserResponse
 	for _, user := range users {
-		result = append(result, server.StbUser{
-			StbUserUuid:   user.StbUserUuid,
-			StbCustomerId: int32(user.StbCustomerID),
-			FirstName:     user.FirstName,
-			MiddleName:    user.MiddleName,
-			LastName:      user.LastName,
-			Initials:      user.Initials,
-			HasStatus:     int32(user.HasStatus),
-			HasAuthMethod: int32(user.HasAuthMethod),
+		result = append(result, server.StbUserResponse{
+			StbUserUuid:   server.NewOptUUID(user.StbUserUuid),
+			StbCustomerId: server.NewOptInt32(int32(user.StbCustomerID)),
+			FirstName:     server.NewOptString(user.FirstName),
+			MiddleName:    server.NewOptString(user.MiddleName),
+			LastName:      server.NewOptString(user.LastName),
+			Initials:      server.NewOptString(user.Initials),
+			HasStatus:     server.NewOptInt32(int32(user.HasStatus)),
+			HasAuthMethod: server.NewOptInt32(int32(user.HasAuthMethod)),
 		})
 	}
 
-	return result, err
+	return &result, err
 }
 
-func (h *Handler) GetStbUserByUUID(ctx context.Context, params server.GetStbUserByUUIDParams) (server.StbUser, error) {
-	user, err := h.ro.GetStbUserByUUID(ctx, params.StbUserUUID)
+func (h *StbUserHandler) GetStbUserByUUID(ctx context.Context, params server.GetStbUserByUUIDParams) (server.GetStbUserByUUIDRes, error) {
+	user, err := StbUserRepo.GetStbUserByUUID(ctx, params.StbUserUUID)
 
-	return server.StbUser{
-		StbUserUuid:   user.StbUserUuid,
-		StbCustomerId: int32(user.StbCustomerID),
-		FirstName:     user.FirstName,
-		MiddleName:    user.MiddleName,
-		LastName:      user.LastName,
-		Initials:      user.Initials,
-		HasStatus:     int32(user.HasStatus),
-		HasAuthMethod: int32(user.HasAuthMethod),
+	return &server.StbUserResponse{
+		StbUserUuid:   server.NewOptUUID(user.StbUserUuid),
+		StbCustomerId: server.NewOptInt32(int32(user.StbCustomerID)),
+		FirstName:     server.NewOptString(user.FirstName),
+		MiddleName:    server.NewOptString(user.MiddleName),
+		LastName:      server.NewOptString(user.LastName),
+		Initials:      server.NewOptString(user.Initials),
+		HasStatus:     server.NewOptInt32(int32(user.HasStatus)),
+		HasAuthMethod: server.NewOptInt32(int32(user.HasAuthMethod)),
 	}, err
 }
 
-func (h *Handler) UpdateStbUserByUUID(ctx context.Context, params server.UpdateStbUserByUUIDParams, req server.StbUserUpdateRequestBody) (server.StbUser, error) {
-	err := h.rw.UpdateStbUser(ctx, stbuserrw.UpdateStbUserParams{
-		StbUserUuid:   params.StbUserUUID,
-		FirstName:     req.GetFirstName().Value,
-		MiddleName:    req.MiddleName,
-		LastName:      req.LastName,
-		Initials:      req.Initials,
-		HasStatus:     int16(req.HasStatus),
-		HasAuthMethod: int16(req.HasAuthMethod),
-	})
+func (h *StbUserHandler) UpdateStbUserByUUID(ctx context.Context, params server.UpdateStbUserByUUIDParams, req server.StbUserUpdateRequestBody) (server.UpdateStbUserByUUIDRes, error) {
+	mappedPsqlUser := mappers.MapStbUserToPgStbUser(params.StbUserUUID, req)
 
-	user, err := h.ro.GetStbUserByUUID(ctx, params.StbUserUUID)
+	err := StbUserRepo.UpdateStbUser(ctx, mappedPsqlUser)
 
-	return server.StbUser{
-		StbUserUuid:   user.StbUserUuid,
-		StbCustomerId: int32(user.StbCustomerID),
-		FirstName:     user.FirstName,
-		MiddleName:    user.MiddleName,
-		LastName:      user.LastName,
-		Initials:      user.Initials,
-		HasStatus:     int32(user.HasStatus),
-		HasAuthMethod: int32(user.HasAuthMethod),
+	user, err := StbUserRepo.GetStbUserByUUID(ctx, params.StbUserUUID)
+
+	return &server.StbUserResponse{
+		StbUserUuid:   server.NewOptUUID(user.StbUserUuid),
+		StbCustomerId: server.NewOptInt32(int32(user.StbCustomerID)),
+		FirstName:     server.NewOptString(user.FirstName),
+		MiddleName:    server.NewOptString(user.MiddleName),
+		LastName:      server.NewOptString(user.LastName),
+		Initials:      server.NewOptString(user.Initials),
+		HasStatus:     server.NewOptInt32(int32(user.HasStatus)),
+		HasAuthMethod: server.NewOptInt32(int32(user.HasAuthMethod)),
 	}, err
 }
+
+func (h *StbUserHandler) DeleteStbUserByUUID(ctx context.Context, req server.DeleteStbUserByUUIDParams) (server.DeleteStbUserByUUIDRes, error) {
+	return nil, nil
+}
+
+var Handlers = StbUserHandler{}

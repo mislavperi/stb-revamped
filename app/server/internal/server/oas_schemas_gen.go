@@ -201,7 +201,7 @@ type GetStbUsersInternalServerError ErrorMessage
 
 func (*GetStbUsersInternalServerError) getStbUsersRes() {}
 
-type GetStbUsersOKApplicationJSON []StbUser
+type GetStbUsersOKApplicationJSON []StbUserResponse
 
 func (*GetStbUsersOKApplicationJSON) getStbUsersRes() {}
 
@@ -400,134 +400,6 @@ func (s *ServerErrorResponseStatusCode) SetResponse(val ServerErrorResponse) {
 	s.Response = val
 }
 
-// Ref: #/StbUser
-type StbUser struct {
-	StbUserId     int32     `json:"stbUserId"`
-	StbUserUuid   uuid.UUID `json:"stbUserUuid"`
-	StbCustomerId int32     `json:"stbCustomerId"`
-	HasStatus     int32     `json:"hasStatus"`
-	HasAuthMethod int32     `json:"hasAuthMethod"`
-	FirstName     string    `json:"firstName"`
-	MiddleName    string    `json:"middleName"`
-	LastName      string    `json:"lastName"`
-	Initials      string    `json:"initials"`
-	DtCreated     time.Time `json:"dtCreated"`
-	DtModified    time.Time `json:"dtModified"`
-}
-
-// GetStbUserId returns the value of StbUserId.
-func (s *StbUser) GetStbUserId() int32 {
-	return s.StbUserId
-}
-
-// GetStbUserUuid returns the value of StbUserUuid.
-func (s *StbUser) GetStbUserUuid() uuid.UUID {
-	return s.StbUserUuid
-}
-
-// GetStbCustomerId returns the value of StbCustomerId.
-func (s *StbUser) GetStbCustomerId() int32 {
-	return s.StbCustomerId
-}
-
-// GetHasStatus returns the value of HasStatus.
-func (s *StbUser) GetHasStatus() int32 {
-	return s.HasStatus
-}
-
-// GetHasAuthMethod returns the value of HasAuthMethod.
-func (s *StbUser) GetHasAuthMethod() int32 {
-	return s.HasAuthMethod
-}
-
-// GetFirstName returns the value of FirstName.
-func (s *StbUser) GetFirstName() string {
-	return s.FirstName
-}
-
-// GetMiddleName returns the value of MiddleName.
-func (s *StbUser) GetMiddleName() string {
-	return s.MiddleName
-}
-
-// GetLastName returns the value of LastName.
-func (s *StbUser) GetLastName() string {
-	return s.LastName
-}
-
-// GetInitials returns the value of Initials.
-func (s *StbUser) GetInitials() string {
-	return s.Initials
-}
-
-// GetDtCreated returns the value of DtCreated.
-func (s *StbUser) GetDtCreated() time.Time {
-	return s.DtCreated
-}
-
-// GetDtModified returns the value of DtModified.
-func (s *StbUser) GetDtModified() time.Time {
-	return s.DtModified
-}
-
-// SetStbUserId sets the value of StbUserId.
-func (s *StbUser) SetStbUserId(val int32) {
-	s.StbUserId = val
-}
-
-// SetStbUserUuid sets the value of StbUserUuid.
-func (s *StbUser) SetStbUserUuid(val uuid.UUID) {
-	s.StbUserUuid = val
-}
-
-// SetStbCustomerId sets the value of StbCustomerId.
-func (s *StbUser) SetStbCustomerId(val int32) {
-	s.StbCustomerId = val
-}
-
-// SetHasStatus sets the value of HasStatus.
-func (s *StbUser) SetHasStatus(val int32) {
-	s.HasStatus = val
-}
-
-// SetHasAuthMethod sets the value of HasAuthMethod.
-func (s *StbUser) SetHasAuthMethod(val int32) {
-	s.HasAuthMethod = val
-}
-
-// SetFirstName sets the value of FirstName.
-func (s *StbUser) SetFirstName(val string) {
-	s.FirstName = val
-}
-
-// SetMiddleName sets the value of MiddleName.
-func (s *StbUser) SetMiddleName(val string) {
-	s.MiddleName = val
-}
-
-// SetLastName sets the value of LastName.
-func (s *StbUser) SetLastName(val string) {
-	s.LastName = val
-}
-
-// SetInitials sets the value of Initials.
-func (s *StbUser) SetInitials(val string) {
-	s.Initials = val
-}
-
-// SetDtCreated sets the value of DtCreated.
-func (s *StbUser) SetDtCreated(val time.Time) {
-	s.DtCreated = val
-}
-
-// SetDtModified sets the value of DtModified.
-func (s *StbUser) SetDtModified(val time.Time) {
-	s.DtModified = val
-}
-
-func (*StbUser) getStbUserByUUIDRes()    {}
-func (*StbUser) updateStbUserByUUIDRes() {}
-
 // Ref: #/StbUserCreateRequestBody
 type StbUserCreateRequestBody struct {
 	StbUserUuid   uuid.UUID `json:"stbUserUuid"`
@@ -712,7 +584,9 @@ func (s *StbUserResponse) SetInitials(val OptString) {
 	s.Initials = val
 }
 
-func (*StbUserResponse) createStbUserRes() {}
+func (*StbUserResponse) createStbUserRes()       {}
+func (*StbUserResponse) getStbUserByUUIDRes()    {}
+func (*StbUserResponse) updateStbUserByUUIDRes() {}
 
 // Ref: #/StbUserUpdateRequestBody
 type StbUserUpdateRequestBody struct {

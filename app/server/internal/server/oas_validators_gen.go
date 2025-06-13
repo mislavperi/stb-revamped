@@ -34,7 +34,7 @@ func (s *CreateTimeEntryRequestBody) Validate() error {
 }
 
 func (s GetStbUsersOKApplicationJSON) Validate() error {
-	alias := ([]StbUser)(s)
+	alias := ([]StbUserResponse)(s)
 	if alias == nil {
 		return errors.New("nil is invalid value")
 	}

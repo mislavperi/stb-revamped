@@ -5,12 +5,12 @@ import (
 	"net/http"
 	"os"
 	sqldb "stb/app/server/internal/db/sql"
-	
 
 	"stb/app/server/internal/server"
 	auth "stb/app/server/internal/session"
-	timeentry "stb/app/server/internal/time_entry"
 	stbuser "stb/app/server/internal/stb_user"
+
+	timeentry "stb/app/server/internal/time_entry"
 
 	"stb/app/server/openapi"
 
@@ -23,10 +23,9 @@ type handler struct {
 }
 
 func main() {
-
 	service := &handler{
 		TimeEntryHandler: timeentry.Handlers,
-		StbUserHandler: stbuser.Handlers,
+		StbUserHandler:   stbuser.Handlers,
 	}
 
 	srv, err := server.NewServer(service, auth.SecurityHandler, server.NotFoundHandler, server.GenericErrorHandler)
