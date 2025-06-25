@@ -60,7 +60,9 @@ func (h *StbUserHandler) GetStbUsers(ctx context.Context) (server.GetStbUsersRes
 		})
 	}
 
-	return &result, err
+	response := server.GetStbUsersOKApplicationJSON(result)
+
+	return &response, err
 }
 
 func (h *StbUserHandler) GetStbUserByUUID(ctx context.Context, params server.GetStbUserByUUIDParams) (server.GetStbUserByUUIDRes, error) {
@@ -78,12 +80,18 @@ func (h *StbUserHandler) GetStbUserByUUID(ctx context.Context, params server.Get
 	}, err
 }
 
-func (h *StbUserHandler) UpdateStbUserByUUID(ctx context.Context, params server.UpdateStbUserByUUIDParams, req server.StbUserUpdateRequestBody) (server.UpdateStbUserByUUIDRes, error) {
-	mappedPsqlUser := mappers.MapStbUserToPgStbUser(params.StbUserUUID, req)
+func (h *StbUserHandler) UpdateStbUserByUUID(ctx context.Context, req *server.StbUserUpdateRequestBody, params server.UpdateStbUserByUUIDParams) (server.UpdateStbUserByUUIDRes, error) {
+	mappedPsqlUser := mappers.MapStbUserToPgStbUser(params.StbUserUUID, *req)
 
 	err := StbUserRepo.UpdateStbUser(ctx, mappedPsqlUser)
+	if err != nil {
+		return nil, err
+	}
 
 	user, err := StbUserRepo.GetStbUserByUUID(ctx, params.StbUserUUID)
+	if err != nil {
+		return nil, err
+	}
 
 	return &server.StbUserResponse{
 		StbUserUuid:   server.NewOptUUID(user.StbUserUuid),

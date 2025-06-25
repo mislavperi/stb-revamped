@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"os"
+
 	sqldb "stb/app/server/internal/db/sql"
 
 	"stb/app/server/internal/server"
@@ -20,6 +22,14 @@ import (
 type handler struct {
 	timeentry.TimeEntryHandler
 	stbuser.StbUserHandler
+}
+
+func (h *handler) NewError(ctx context.Context, err error) *server.ServerErrorResponseStatusCode {
+	// Create a server error response with the error message
+	return &server.ServerErrorResponseStatusCode{
+		StatusCode: 500,
+		Response: server.ServerErrorResponse{},
+	}
 }
 
 func main() {
