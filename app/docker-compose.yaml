@@ -5,8 +5,6 @@ volumes:
   grafana-storage: {}
 
 services:
-
-
   # # # # # # # # # # # #
   #
   #  Application Containers
@@ -42,7 +40,7 @@ services:
       POSTGRES_PASSWORD: &pg-password ${POSTGRES_PASSWORD:-none1none}
     working_dir: /go_app
     #command: [ "gunicorn", "-c", "gunicorn_config.py", "bot.main:bot", "--bind", "0.0.0.0:8000" ]
-    command: [ "sleep", "infinity"]
+    command: ["sleep", "infinity"]
     ports:
       - "8001:8000"
     healthcheck:
@@ -50,8 +48,6 @@ services:
       interval: 10s
       timeout: 9s
       retries: 6
-
-
 
   # # # # # # # # # # # #
   #
@@ -93,7 +89,7 @@ services:
       WAIT_FOR_HOST: *pg-host
       WAIT_FOR_PORT: 5432
     working_dir: /db
-    command: [ "scripts/wait-for-port-up.sh" ]
+    command: ["scripts/wait-for-port-up.sh"]
 
   mongo-init:
     networks: [steaby-net]
@@ -106,7 +102,7 @@ services:
       WAIT_FOR_HOST: *mongo-host
       WAIT_FOR_PORT: 27017
     working_dir: /db
-    command: [ "scripts/wait-for-port-up.sh" ]
+    command: ["scripts/wait-for-port-up.sh"]
 
   db-migrate:
     networks: [steaby-net]
@@ -127,10 +123,8 @@ services:
       PGPASSWORD: ${POSTGRES_PASSWORD:-GoPG}
       MONGODB_PASSWORD: ${MONGO_PASSWORD:-GoMONGO}
     working_dir: /db
-    command: [ "scripts/db-migrate.sh" ]
+    command: ["scripts/db-migrate.sh"]
     #command: [ "sleep", "infinity" ]
-
-
 
   # # # # # # # # # # # #
   #
@@ -163,7 +157,7 @@ services:
     image: jaegertracing/jaeger:2.2.0
     ports:
       - "16686:16686" # UI
-      - "4317:4317"   # OTLP over gRPC
+      - "4317:4317" # OTLP over gRPC
 
   jaeger-init:
     networks: [steaby-net]
@@ -175,7 +169,7 @@ services:
       WAIT_FOR_HOST: *jaeger-host
       WAIT_FOR_PORT: 4317
     working_dir: /stats
-    command: [ "scripts/wait-for-port-up.sh" ]
+    command: ["scripts/wait-for-port-up.sh"]
 
   # See: https://www.jaegertracing.io/docs/1.58/spm/#architecture
   prometheus:
@@ -185,7 +179,7 @@ services:
     volumes:
       - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
-      - '9090:9090'
+      - "9090:9090"
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       #- --log.level=debug
@@ -201,7 +195,7 @@ services:
       WAIT_FOR_HOST: *prometheus-host
       WAIT_FOR_PORT: 9090
     working_dir: /stats
-    command: [ "scripts/wait-for-port-up.sh" ]
+    command: ["scripts/wait-for-port-up.sh"]
 
   test:
     networks: [steaby-net]
@@ -217,5 +211,5 @@ services:
       SKIP_INTEGRATION_TESTS: ${SKIP_INTEGRATION_TESTS:-true}
       SKIP_UNIT_TESTS: ${SKIP_UNIT_TESTS:-true}
     working_dir: /app
-    #command: [ "sleep", "infinity"]
-    command: ["test/run.sh"]
+    command: ["sleep", "infinity"]
+    #command: ["test/run.sh"]
