@@ -27,8 +27,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ServerErrorResponse'
-            security:
-                -   BearerAuth: []
         post:
             tags:
                 - stb_user
@@ -58,8 +56,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ServerErrorResponse'
-            security:
-                -   BearerAuth: []
     /stb_user/{stb_user_uuid}:
         get:
             tags:
@@ -96,8 +92,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ServerErrorResponse'
-            security:
-                -   BearerAuth: []
         put:
             tags:
                 - stb_user
@@ -139,8 +133,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ServerErrorResponse'
-            security:
-                -   BearerAuth: []
         delete:
             tags:
                 - stb_user
@@ -173,8 +165,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ServerErrorResponse'
-            security:
-                -   BearerAuth: []
     /time-entry:
         get:
             tags:
@@ -199,8 +189,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ServerErrorResponse'
-            security:
-                -   BearerAuth: []
         post:
             tags:
                 - time_entry
@@ -230,8 +218,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ServerErrorResponse'
-            security:
-                -   BearerAuth: []
     /time-entry/{timeEntryUuid}:
         delete:
             tags:
@@ -260,8 +246,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ServerErrorResponse'
-            security:
-                -   BearerAuth: []
         patch:
             tags:
                 - time_entry
@@ -297,8 +281,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ServerErrorResponse'
-            security:
-                -   BearerAuth: []
 components:
     schemas:
         CreateTimeEntryRequestBody:
@@ -493,8 +475,3 @@ components:
                 application/json:
                     schema:
                         $ref: '#/components/schemas/ErrorMessage'
-    securitySchemes:
-        BearerAuth:
-            type: http
-            scheme: bearer
-            flows: {}

@@ -3,11 +3,10 @@ package stb_user
 import (
 	"context"
 
-	"github.com/google/uuid"
 	stbuserro "stb/app/server/internal/stb_user/sql_ro"
 	stbuserrw "stb/app/server/internal/stb_user/sql_rw"
 
-	sqldb "stb/app/server/internal/db/sql"
+	"github.com/google/uuid"
 )
 
 type stbUserRepo struct {
@@ -16,10 +15,11 @@ type stbUserRepo struct {
 	ctx context.Context
 }
 
-func NewstbUserRepo(ro *stbuserro.Queries, rw *stbuserrw.Queries) *stbUserRepo {
+func NewstbUserRepo(ro *stbuserro.Queries, rw *stbuserrw.Queries, ctx context.Context) *stbUserRepo {
 	return &stbUserRepo{
-		ro: ro,
-		rw: rw,
+		ro:  ro,
+		rw:  rw,
+		ctx: ctx,
 	}
 }
 
@@ -38,10 +38,4 @@ func (r *stbUserRepo) ListStbUsers(ctx context.Context) ([]stbuserro.ListStbUser
 
 func (r *stbUserRepo) UpdateStbUser(ctx context.Context, params stbuserrw.UpdateStbUserParams) error {
 	return r.rw.UpdateStbUser(ctx, params)
-}
-
-var StbUserRepo = &stbUserRepo{
-	ro:  stbuserro.New(sqldb.RoHandle.Pool),
-	rw:  stbuserrw.New(sqldb.RwHandle.Pool),
-	ctx: context.Background(),
 }

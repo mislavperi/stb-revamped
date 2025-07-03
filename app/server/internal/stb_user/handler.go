@@ -2,6 +2,7 @@ package stb_user
 
 import (
 	"context"
+	"fmt"
 
 	"stb/app/server/internal/server"
 	"stb/app/server/internal/stb_user/mappers"
@@ -11,15 +12,16 @@ import (
 )
 
 type StbUserHandler struct {
+	repository *stbUserRepo
 }
 
-func NewStbUserHandler() *StbUserHandler {
-	return &StbUserHandler{}
+func NewStbUserHandler(repo *stbUserRepo) *StbUserHandler {
+	return &StbUserHandler{repository: repo}
 }
 
 func (h *StbUserHandler) CreateStbUser(ctx context.Context, req *server.StbUserCreateRequestBody) (server.CreateStbUserRes, error) {
 	newUUID := uuid.New()
-	err := StbUserRepo.CreateStbUser(ctx, stbuserrw.CreateStbUserParams{
+	err := h.repository.CreateStbUser(ctx, stbuserrw.CreateStbUserParams{
 		StbUserUuid:   newUUID,
 		StbCustomerID: int16(req.StbCustomerId),
 		FirstName:     req.FirstName,
@@ -44,7 +46,13 @@ func (h *StbUserHandler) CreateStbUser(ctx context.Context, req *server.StbUserC
 }
 
 func (h *StbUserHandler) GetStbUsers(ctx context.Context) (server.GetStbUsersRes, error) {
-	users, err := StbUserRepo.ListStbUsers(ctx)
+	users, err := h.repository.ListStbUsers(ctx)
+	fmt.Println(users)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(err)
 
 	var result []server.StbUserResponse
 	for _, user := range users {
@@ -66,7 +74,7 @@ func (h *StbUserHandler) GetStbUsers(ctx context.Context) (server.GetStbUsersRes
 }
 
 func (h *StbUserHandler) GetStbUserByUUID(ctx context.Context, params server.GetStbUserByUUIDParams) (server.GetStbUserByUUIDRes, error) {
-	user, err := StbUserRepo.GetStbUserByUUID(ctx, params.StbUserUUID)
+	user, err := h.repository.GetStbUserByUUID(ctx, params.StbUserUUID)
 
 	return &server.StbUserResponse{
 		StbUserUuid:   server.NewOptUUID(user.StbUserUuid),
@@ -83,12 +91,12 @@ func (h *StbUserHandler) GetStbUserByUUID(ctx context.Context, params server.Get
 func (h *StbUserHandler) UpdateStbUserByUUID(ctx context.Context, req *server.StbUserUpdateRequestBody, params server.UpdateStbUserByUUIDParams) (server.UpdateStbUserByUUIDRes, error) {
 	mappedPsqlUser := mappers.MapStbUserToPgStbUser(params.StbUserUUID, *req)
 
-	err := StbUserRepo.UpdateStbUser(ctx, mappedPsqlUser)
+	err := h.repository.UpdateStbUser(ctx, mappedPsqlUser)
 	if err != nil {
 		return nil, err
 	}
 
-	user, err := StbUserRepo.GetStbUserByUUID(ctx, params.StbUserUUID)
+	user, err := h.repository.GetStbUserByUUID(ctx, params.StbUserUUID)
 	if err != nil {
 		return nil, err
 	}
@@ -109,4 +117,4 @@ func (h *StbUserHandler) DeleteStbUserByUUID(ctx context.Context, req server.Del
 	return nil, nil
 }
 
-var Handlers = StbUserHandler{}
+var Handlers = &StbUserHandler{}

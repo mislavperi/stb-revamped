@@ -13,7 +13,3 @@ paths:
     $ref: './paths/stb_user_uuid.yml#/StbUserUuidPaths'
 
 components:
-  securitySchemes:
-    BearerAuth:
-      type: http
-      scheme: bearer

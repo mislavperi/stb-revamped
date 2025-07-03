@@ -12,8 +12,6 @@ TimeEntryUuidPaths:
         schema:
           type: string
           format: uuid
-    security:
-      - BearerAuth: []
     responses:
       '204':
         description: Time entry removed from matter
@@ -40,8 +38,6 @@ TimeEntryUuidPaths:
         schema:
           type: string
           format: uuid
-    security:
-      - BearerAuth: []
     requestBody:
       required: true
       content:

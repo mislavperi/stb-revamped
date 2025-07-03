@@ -7,7 +7,6 @@ import { DefaultErrorDisplay } from '@/components'
 const HomePage: FC = () => {
   return (
     <Stack>
-      <Title>Welcome to the the FAKE APP dashboard</Title>
       <Text>What are you here for?</Text>
       <Space h='xl' />
       <Group>

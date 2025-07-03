@@ -5,8 +5,6 @@ StbUserUuidPaths:
       - stb_user
     description: Get a single stb_user by UUID
     operationId: getStbUserByUUID
-    security:
-      - BearerAuth: []
     parameters:
       - name: stb_user_uuid
         in: path
@@ -41,8 +39,6 @@ StbUserUuidPaths:
       - stb_user
     description: Update an existing stb_user by UUID
     operationId: updateStbUserByUUID
-    security:
-      - BearerAuth: []
     parameters:
       - name: stb_user_uuid
         in: path
@@ -83,8 +79,6 @@ StbUserUuidPaths:
       - stb_user
     description: Delete a single stb_user by UUID
     operationId: deleteStbUserByUUID
-    security:
-      - BearerAuth: []
     parameters:
       - name: stb_user_uuid
         in: path

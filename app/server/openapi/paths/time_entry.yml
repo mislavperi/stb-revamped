@@ -5,8 +5,6 @@ TimeEntryPaths:
       - time_entry
     description: Add a time entry to a matter
     operationId: createTimeEntry
-    security:
-      - BearerAuth: []
     requestBody:
       required: true
       content:
@@ -37,8 +35,6 @@ TimeEntryPaths:
       - time_entry
     description: Get all time entries
     operationId: getTimeEntries
-    security:
-      - BearerAuth: []
     responses:
       '200':
         content:

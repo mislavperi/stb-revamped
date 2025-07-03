@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	logger "stb/app/server/util/log"
@@ -13,7 +14,8 @@ import (
 
 var NotFoundHandler = WithNotFound(func(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
-	_, _ = io.WriteString(w, `{"message": "not found"}`)
+	_, err := io.WriteString(w, `{"message": "not found"}`)
+	fmt.Println(err)
 })
 
 var GenericErrorHandler = WithErrorHandler(func(ctx context.Context, w http.ResponseWriter, r *http.Request, err error) {

@@ -27,8 +27,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ServerErrorResponse'
-            security:
-                -   BearerAuth: []
         post:
             tags:
                 - stb_user
@@ -45,7 +43,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/responses/StbUserCreateResponse'
+                                $ref: '#/components/schemas/StbUserResponse'
                 "400":
                     $ref: '#/components/responses/BadInputResponse'
                 "401":
@@ -58,8 +56,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ServerErrorResponse'
-            security:
-                -   BearerAuth: []
     /stb_user/{stb_user_uuid}:
         get:
             tags:
@@ -81,7 +77,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/StbUser'
+                                $ref: '#/components/schemas/StbUserResponse'
                 "400":
                     $ref: '#/components/responses/BadInputResponse'
                 "401":
@@ -96,8 +92,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ServerErrorResponse'
-            security:
-                -   BearerAuth: []
         put:
             tags:
                 - stb_user
@@ -124,7 +118,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/StbUser'
+                                $ref: '#/components/schemas/StbUserResponse'
                 "400":
                     $ref: '#/components/responses/BadInputResponse'
                 "401":
@@ -139,8 +133,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ServerErrorResponse'
-            security:
-                -   BearerAuth: []
         delete:
             tags:
                 - stb_user
@@ -173,8 +165,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ServerErrorResponse'
-            security:
-                -   BearerAuth: []
     /time-entry:
         get:
             tags:
@@ -199,8 +189,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ServerErrorResponse'
-            security:
-                -   BearerAuth: []
         post:
             tags:
                 - time_entry
@@ -230,8 +218,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ServerErrorResponse'
-            security:
-                -   BearerAuth: []
     /time-entry/{timeEntryUuid}:
         delete:
             tags:
@@ -260,8 +246,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ServerErrorResponse'
-            security:
-                -   BearerAuth: []
         patch:
             tags:
                 - time_entry
@@ -297,8 +281,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ServerErrorResponse'
-            security:
-                -   BearerAuth: []
 components:
     schemas:
         CreateTimeEntryRequestBody:
@@ -338,50 +320,6 @@ components:
                 - message
         ServerErrorResponse:
             description: Unexpected server error
-        StbUser:
-            type: object
-            properties:
-                stbUserId:
-                    type: integer
-                    format: int32
-                stbUserUuid:
-                    type: string
-                    format: uuid
-                stbCustomerId:
-                    type: integer
-                    format: int32
-                hasStatus:
-                    type: integer
-                    format: int32
-                hasAuthMethod:
-                    type: integer
-                    format: int32
-                firstName:
-                    type: string
-                middleName:
-                    type: string
-                lastName:
-                    type: string
-                initials:
-                    type: string
-                dtCreated:
-                    type: string
-                    format: date-time
-                dtModified:
-                    type: string
-                    format: date-time
-            required:
-                - stbUserId
-                - stbUserUuid
-                - stbCustomerId
-                - hasStatus
-                - hasAuthMethod
-                - firstName
-                - middleName
-                - lastName
-                - initials
-                - dtCreated
-                - dtModified
         StbUserCreateRequestBody:
             type: object
             properties:
@@ -414,29 +352,6 @@ components:
                 - middleName
                 - lastName
                 - initials
-        StbUserCreateResponse:
-            type: object
-            properties:
-                stbUserUuid:
-                    type: string
-                    format: uuid
-                stbCustomerId:
-                    type: integer
-                    format: int32
-                hasStatus:
-                    type: integer
-                    format: int32
-                hasAuthMethod:
-                    type: integer
-                    format: int32
-                firstName:
-                    type: string
-                middleName:
-                    type: string
-                lastName:
-                    type: string
-                initials:
-                    type: string
         StbUserResponse:
             type: object
             properties:
@@ -460,7 +375,6 @@ components:
                     type: string
                 initials:
                     type: string
-
         StbUserUpdateRequestBody:
             type: object
             properties:
@@ -561,8 +475,3 @@ components:
                 application/json:
                     schema:
                         $ref: '#/components/schemas/ErrorMessage'
-    securitySchemes:
-        BearerAuth:
-            type: http
-            scheme: bearer
-            flows: {}

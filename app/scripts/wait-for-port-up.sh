@@ -2,7 +2,7 @@
 set -e
 
 MARK=$(date +%s)
-while ! nc -w 1 -z "$WAIT_FOR_HOST" $WAIT_FOR_PORT; do
+while ! nc -w 1 -z "$WAIT_FOR_HOST" "$WAIT_FOR_PORT"; do
     if ! (($(date +%s)-MARK)); then
         sleep 1  # Sleep if time since MARK is less than 1s
     fi

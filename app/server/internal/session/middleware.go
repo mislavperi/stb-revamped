@@ -3,7 +3,6 @@ package session
 import (
 	"context"
 	"errors"
-	"stb/app/server/internal/server"
 	logger "stb/app/server/util/log"
 )
 
@@ -11,7 +10,7 @@ type contextKey string
 
 const sessionKey contextKey = "session"
 
-type securityHandler struct{}
+/* type securityHandler struct{}
 
 var _ server.SecurityHandler = (*securityHandler)(nil)
 
@@ -41,7 +40,7 @@ func (h *securityHandler) HandleBearerAuth(ctx context.Context, operationName se
 	// Can do RBAC here, using operation name and by getting the session from Redis. Need to rename APIKey to SessionID tho
 	ctx = addSessionToContext(ctx, usr)
 	return ctx, nil
-}
+} */
 
 // Mocking the user object to be used in the context
 type StbUser struct {
@@ -52,9 +51,9 @@ type StbUser struct {
 	Token     string `json:"token"`
 }
 
-func addSessionToContext(ctx context.Context, session *StbUser) context.Context {
+/* func addSessionToContext(ctx context.Context, session *StbUser) context.Context {
 	return context.WithValue(ctx, sessionKey, session)
-}
+} */
 
 func GetSessionFromContext(ctx context.Context) (*StbUser, error) {
 	session, ok := ctx.Value(sessionKey).(*StbUser)
@@ -65,4 +64,4 @@ func GetSessionFromContext(ctx context.Context) (*StbUser, error) {
 	return session, nil
 }
 
-var SecurityHandler = &securityHandler{}
+// var SecurityHandler = &securityHandler{}
